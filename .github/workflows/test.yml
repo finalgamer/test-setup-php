@@ -1,0 +1,27 @@
+
+name: Test ext workflow
+on: [push]
+jobs:
+  run:
+    runs-on: ${{ matrix.operating-systems }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.1']
+        operating-systems: [ubuntu-22.04, ubuntu-20.04, ubuntu-18.04]
+        update: ['true', 'false']
+    steps: 
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: redis, gd
+        env:
+          update: ${{ matrix.update }}
+
+      - name: Check PHP version
+        run: php -v
+
+      - name: Check PHP extensions
+        run: |
+          php -m
